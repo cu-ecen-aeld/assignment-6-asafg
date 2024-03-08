@@ -1,0 +1,23 @@
+#!/bin/sh
+
+script_dir=/usr/sbin
+
+case "$1" in
+  start)
+    echo "Loading faulty module..."
+    ${script_dir}/module_load faulty
+    echo "Loading hello module..."
+    modprobe hello
+    ;;
+  stop)
+    echo "Unloading scull module..."
+    ${script_dir}/module_unload faulty
+    echo "Unloading hello module..."
+    rmmod hello
+    ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    exit 1
+esac
+exit 0
+

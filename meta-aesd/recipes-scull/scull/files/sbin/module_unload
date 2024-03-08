@@ -1,0 +1,27 @@
+#!/bin/sh
+module=$1
+device=$1
+
+if [ $# -lt 1 ] || [ $# -gt 3 ] || [ $# -eq 2 ]; then
+  echo "Wrong number of arguments"
+  echo "usage: $0 module_name [MIN MAX]"
+  echo "Will unload the module specified by module_name and remove assocaited device(s)"
+  echo "If MIN and MAX are specified, /dev/module_nameMIN to /dev/module_nameMIN"
+  ehco "will be removed as well."
+  exit 1
+fi
+
+# invoke rmmod with all arguments we got
+rmmod $module || exit 1
+
+# Remove stale nodes
+
+rm -f /dev/${device}
+
+if [ $# -eq 3 ]; then
+  from=$2
+  to=$3
+  for i in $(seq $from $to) ; do
+    rm -f /dev/${device}${i}
+  done
+fi

@@ -15,7 +15,7 @@ SRC_URI = "git://git@github.com/cu-ecen-aeld/assignment-7-asafg.git;protocol=ssh
            file://0001-Leave-only-misc-modules-and-scull-sub-directories.patch \
            file://sbin/module_load \
            file://sbin/module_unload \
-           file://etc/init.d/scull-module \
+           file://etc/init.d/misc-modules \
            "
 
 # Modify these as desired
@@ -26,16 +26,16 @@ S = "${WORKDIR}/git"
 
 inherit module
 
-EXTRA_OEMAKE:append:task-install = " -C ${STAGING_KERNEL_DIR} M=${S}/scull"
+EXTRA_OEMAKE:append:task-install = " -C ${STAGING_KERNEL_DIR} M=${S}/misc-modules"
 EXTRA_OEMAKE += "KERNELDIR=${STAGING_KERNEL_DIR}"
 
-FILES:${PN} += "${S}/../etc/init.d/scull-module ${sysconfdir}/init.d/scull-module "
-FILES:${PN} += "${S}/../sbin/module_load ${sbindir}/module_load "
-FILES:${PN} += "${S}/../sbin/module_unload ${sbindir}/module_unload "
+FILES:${PN} += "${S}/../etc/init.d/misc-modules ${sysconfdir}/init.d/misc-modules"
+FILES:${PN} += "${S}/../sbin/module_load ${sbindir}/module_load"
+FILES:${PN} += "${S}/../sbin/module_unload ${sbindir}/module_unload"
 
 inherit update-rc.d
 INITSCRIPT_PACKAGES = "${PN}"
-INITSCRIPT_NAME:${PN} = "scull-module"
+INITSCRIPT_NAME:${PN} = "misc-modules"
 
 # we need to use do_install:append () rather than just do_install (), 
 # otherwise our do_install () overrides the one inheritted from class module
@@ -45,5 +45,5 @@ do_install:append () {
 	install -m 0755 ${S}/../sbin/module_load ${D}${sbindir}
 	install -m 0755 ${S}/../sbin/module_unload ${D}${sbindir}
   install -d ${D}${sysconfdir}/init.d
-  install -m 0755 ${S}/../etc/init.d/scull-module ${D}${sysconfdir}/init.d
+  install -m 0755 ${S}/../etc/init.d/misc-modules ${D}${sysconfdir}/init.d
 }
